@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视觉小说XP测试</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- 开始页面 -->
+        <div id="start-page" class="page active">
+            <header>
+                <h1>视觉小说XP测试</h1>
+                <p>自动提取在 VNDB 上的记录过的作品, 通过选择测试自己的xp</p>
+            </header>
+            <main>
+                <div class="form-group">
+                    <label for="vndbUserId">用户ID (u+数字):</label>
+                    <input type="text" id="vndbUserId" placeholder="u114514">
+                </div>
+                <div class="form-group">
+                    <label>列表标签 (选择或输入ID, 并集):</label>
+                    <div id="vndbLabelsContainer" class="checkbox-group">
+                        <label><input type="checkbox" name="vndbLabel" value="1"> 在玩 (1)</label>
+                        <label><input type="checkbox" name="vndbLabel" value="2" checked> 玩过 (2)</label>
+                        <label><input type="checkbox" name="vndbLabel" value="3"> 搁置 (3)</label>
+                        <label><input type="checkbox" name="vndbLabel" value="4"> 抛弃 (4)</label>
+                        <label><input type="checkbox" name="vndbLabel" value="5"> 愿望单 (5)</label>
+                        <label><input type="checkbox" name="vndbLabel" value="6"> 黑名单 (6)</label>
+                        <label><input type="checkbox" name="vndbLabel" value="7"> 已评分 (7)</label>
+                    </div>
+                    <input type="text" id="vndbLabelsOther" placeholder="其他标签ID, 使用英文逗号分隔">
+                </div>
+                <div class="form-group inline-group">
+                    <div>
+                        <label for="filterGender">筛选角色性别:</label>
+                        <select id="filterGender">
+                            <option value="any">任何性别</option>
+                            <option value="f">女</option>
+                            <option value="m">男</option>
+                            <option value="b">双性</option>
+                            <option value="n">无性别</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filterRole">筛选角色定位 (非剧透):</label>
+                        <select id="filterRole">
+                            <option value="any">任何定位</option>
+                            <option value="main">主角</option>
+                            <option value="primary">主要角色</option>
+                            <option value="side">次要/登场</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group inline-group">
+                    <div>
+                        <label for="userGenderPreference">性别偏好 (影响评分权重):</label>
+                        <select id="userGenderPreference">
+                            <option value="any">无特定偏好</option>
+                            <option value="f">偏好女性角色</option>
+                            <option value="m">偏好男性角色</option>
+                            <option value="b">偏好双性角色</option>
+                            <option value="n">偏好无性别角色</option>
+                        </select>
+                    </div>
+                     <div>
+                        <label for="samplingPercentage">角色抽样比例 (1-100%):</label>
+                        <input type="number" id="samplingPercentage" min="1" max="100" value="100">
+                    </div>
+                </div>
+            </main>
+            <footer>
+                <button id="startButton" class="button-primary">开始测试</button>
+                <button id="loadProgressButton">加载进度</button>
+                <button id="importReportButton">导入报告</button>
+            </footer>
+        </div>
+
+        <!-- 测试页面 -->
+        <div id="test-page" class="page">
+            <header>
+                <div id="progress-info">
+                    <span id="character-count-display">角色: 0 / 0</span>
+                    <span id="background-loading-status"></span>
+                </div>
+            </header>
+            <main>
+                <div id="character-display-container">
+                </div>
+            </main>
+            <footer>
+                <button id="backButton" disabled>上一个角色</button>
+                <button id="skipButton">跳过此角色</button>
+                <button id="saveProgressButton">保存当前进度</button>
+                <button id="quitTestButton" class="button-danger">退出测试</button>
+            </footer>
+        </div>
+
+        <!-- 结果页面 -->
+        <div id="results-page" class="page">
+            <header>
+                <h1>测试结果分析</h1>
+            </header>
+            <main>
+                <div id="results-summary">
+                    <p>分析完成！以下是您的角色偏好特征总结。</p>
+                </div>
+                <div class="controls-group">
+                    <label for="sortResultsBy">特征排序方式:</label>
+                    <select id="sortResultsBy">
+                        <option value="finalScore">最终得分 (综合推荐度)</option>
+                        <option value="meanAdjustedScore">平均贡献分</option>
+                        <option value="count">角色评分次数</option>
+                        <option value="variance">得分方差 (低→高)</option>
+                        <option value="name">特征名称</option>
+                    </select>
+                </div>
+                <div id="trait-scores-display-container">
+                    loading...
+                </div>
+            </main>
+            <footer>
+                <button id="exportReportButton">导出完整报告</button>
+                <button id="backToStartButton" class="button-primary">返回首页</button>
+            </footer>
+        </div>
+
+        <!-- 全局加载遮罩 -->
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="spinner"></div>
+            <p id="loading-overlay-message">正在加载...</p>
+        </div>
+
+        <!-- 自定义模态框 -->
+        <div id="custom-modal-overlay" class="custom-modal-overlay">
+            <div id="custom-modal" class="custom-modal">
+                <h3 id="custom-modal-title">标题</h3>
+                <p id="custom-modal-message">消息内容</p>
+                <div id="custom-modal-buttons" class="custom-modal-buttons">
+                    <button id="custom-modal-confirm" class="button-primary">确认</button>
+                    <button id="custom-modal-cancel" class="button-secondary">取消</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="projinfo-footer" >
+        <span id="version-footer">vnXpTest v114.514</span><br>
+        <span>Powered by </span><a href="https://github.com/XDragonWorks" target="_blank">XDragonWorks</span></a>
+        &nbsp|&nbsp
+        <span>API from </span><a href="https://vndb.org/" target="_blank">VNDB</span></a>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
