@@ -13,21 +13,26 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    min-height: 100vh;
-    padding: 20px;
     overflow-x: hidden;
     flex-direction: column;
+    min-width: 360px;
+}
+
+body:has(#test-page.page.active) {
+    height: 100vh;
+}
+
+body:has(#test-page.page.active)::-webkit-scrollbar {
+    display: none;
 }
 
 #app-container {
-    width: 100%;
-    max-width: 900px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
     position: relative;
-    margin: auto;
+    margin: 24px auto;
+    height: 100%;
 }
 
 /* Page styles (与上次相同) */
@@ -35,12 +40,16 @@ body {
     display: none;
     flex-direction: column;
     padding: 25px 30px;
-    min-height: 400px;
+    height: 100%;
 }
 
 .page.active {
     display: flex;
     animation: fadeIn 0.5s ease-out forwards;
+}
+
+#start-page {
+    height: unset;
 }
 
 @keyframes fadeIn {
@@ -89,8 +98,12 @@ body {
     color: #7f8c8d;
 }
 
-.page main {
+.page {
     flex-grow: 1;
+}
+
+.page main {
+    height: 100%;
 }
 
 .page footer {
@@ -270,10 +283,10 @@ button:disabled {
     border-radius: 6px;
     background-color: #fdfdfd;
     min-height: 300px;
-    display: flex;
-    justify-content: center;
+    max-height: calc(100% - 100px);
     align-items: center;
     transition: opacity 0.3s ease-in-out;
+    display: contents;
 }
 
 #character-display-container.loading-char {
@@ -282,6 +295,7 @@ button:disabled {
 
 .char-content-wrapper {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -343,13 +357,13 @@ button:disabled {
 
 .char-description-container {
     font-size: 0.9em;
-    max-height: 24vh;
     overflow-y: auto;
     padding: 8px;
     background-color: #f9f9f9;
     border-radius: 4px;
     border: 1px solid #eee;
     color: #444;
+    flex: 1;
 }
 
 .rating-buttons-container {
@@ -395,15 +409,18 @@ button:disabled {
 .controls-group {
     margin-bottom: 20px;
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
+    gap: 32px;
 }
 
 .controls-group label {
     font-weight: 600;
 }
 
-.controls-group select {
+.controls-group select,
+.controls-group input {
     padding: 8px 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
@@ -548,23 +565,17 @@ button:disabled {
     }
 }
 
-/* Small screen adjustments (与上次相同) */
-@media (max-width: 768px) {
-
-    #trait-scores-display-container td,
-    #trait-scores-display-container th {
-        font-size: 0.85em;
-        padding: 6px 8px;
-    }
-
-    #trait-scores-display-container .contributing-chars-cell {
-        max-width: 200px;
-    }
-}
-
-@media (max-width: 600px) {
+@media (max-width: 840px) {
     body {
-        padding: 10px;
+        background-color: #fff;
+        height: unset !important;
+    }
+
+    #app-container {
+        margin: 0;
+        width: 100%;
+        height: unset;
+        box-shadow: none;
     }
 
     .page {
@@ -606,11 +617,7 @@ button:disabled {
     }
 
     .rating-buttons-container {
-        flex-direction: column;
-    }
-
-    .rating-button {
-        width: 100%;
+        flex-wrap: wrap;
     }
 
     .page footer {
@@ -690,7 +697,9 @@ button:disabled {
 
 .projinfo-footer {
     padding-top: 24px;
+    padding-bottom: 32px;
     margin: auto;
+    margin-bottom: -96px;
     text-align: center;
     white-space: nowrap;
 }

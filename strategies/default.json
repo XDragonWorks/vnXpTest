@@ -1,0 +1,83 @@
+{
+    "ratingOptions": [
+        {
+            "labelKey": "RatingVeryHate",
+            "value": 1,
+            "defaultLabel": "非常反感"
+        },
+        {
+            "labelKey": "RatingHate",
+            "value": 2,
+            "defaultLabel": "较为反感"
+        },
+        {
+            "labelKey": "RatingDislike",
+            "value": 3,
+            "defaultLabel": "略有反感"
+        },
+        {
+            "labelKey": "RatingNeutral",
+            "value": 4,
+            "defaultLabel": "无感"
+        },
+        {
+            "labelKey": "RatingLike",
+            "value": 5,
+            "defaultLabel": "有点喜欢"
+        },
+        {
+            "labelKey": "RatingLove",
+            "value": 6,
+            "defaultLabel": "较为喜欢"
+        },
+        {
+            "labelKey": "RatingVeryLove",
+            "value": 7,
+            "defaultLabel": "非常喜欢"
+        }
+    ],
+    "traitGroupSettings": {
+        "PLACEHOLDER_GROUP_ID_ENGAGES_SEXUAL": {
+            "id": "PLACEHOLDER_GROUP_ID_ENGAGES_SEXUAL",
+            "name": "Engages in (Sexual)",
+            "enabled": true,
+            "isSexualFilterTarget": true,
+            "weight": 0.7
+        },
+        "PLACEHOLDER_GROUP_ID_SUBJECT_SEXUAL": {
+            "id": "PLACEHOLDER_GROUP_ID_SUBJECT_SEXUAL",
+            "name": "Subject of (Sexual)",
+            "enabled": true,
+            "isSexualFilterTarget": true,
+            "weight": 0.7
+        }
+    },
+    "scoringParameters": {
+        "genderAdjustmentFactor": 0.75,
+        "minReliableCount": 3,
+        "lowSamplePenaltyTiers": [
+            {
+                "maxCount": 0,
+                "factor": 0
+            },
+            {
+                "maxCount": 1,
+                "factor": 0.1
+            },
+            {
+                "maxCount": 2,
+                "factor": 0.4
+            }
+        ],
+        "variancePenalty": {
+            "threshold": 0.8,
+            "maxEffectThreshold": 2.0,
+            "maxPenaltyRatio": 0.5
+        },
+        "consistencyBonus": {
+            "meanThreshold": 0.5,
+            "lowVarianceThreshold": 0.5,
+            "bonusFactor": 1.2
+        }
+    }
+}

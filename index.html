@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>视觉小说XP测试</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="app-container">
         <!-- 开始页面 -->
@@ -15,10 +17,14 @@
                 <p>自动提取在 VNDB 上的记录过的作品, 通过选择测试自己的xp</p>
             </header>
             <main>
+
+                <!-- 用户ID -->
                 <div class="form-group">
                     <label for="vndbUserId">用户ID (u+数字):</label>
                     <input type="text" id="vndbUserId" placeholder="u114514">
                 </div>
+
+                <!-- 标签 -->
                 <div class="form-group">
                     <label>列表标签 (选择或输入ID, 并集):</label>
                     <div id="vndbLabelsContainer" class="checkbox-group">
@@ -32,6 +38,8 @@
                     </div>
                     <input type="text" id="vndbLabelsOther" placeholder="其他标签ID, 使用英文逗号分隔">
                 </div>
+
+                <!-- 筛选 -->
                 <div class="form-group inline-group">
                     <div>
                         <label for="filterGender">筛选角色性别:</label>
@@ -53,6 +61,8 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- 偏好与抽样 -->
                 <div class="form-group inline-group">
                     <div>
                         <label for="userGenderPreference">性别偏好 (影响评分权重):</label>
@@ -64,11 +74,41 @@
                             <option value="n">偏好无性别角色</option>
                         </select>
                     </div>
-                     <div>
+                    <div>
                         <label for="samplingPercentage">角色抽样比例 (1-100%):</label>
                         <input type="number" id="samplingPercentage" min="1" max="100" value="100">
                     </div>
                 </div>
+
+                <!-- 附加 -->
+                <div class="form-group inline-group">
+                    <div>
+                        <label for="enableSpoilers">剧透内容:</label>
+                        <select id="enableSpoilers">
+                            <option value="false">禁用</option>
+                            <option value="true">启用</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="filterSexualTraits">计算性特征:</label>
+                        <select id="filterSexualTraits">
+                            <option value="false">禁用</option>
+                            <option value="true">启用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 策略组 -->
+                <div class="form-group inline-group">
+                    <div>
+                        <label for="strategySelect">评分策略:</label>
+                        <select id="strategySelect">
+                            <option value="strategies/default.json">默认</option>
+                        </select>
+                    </div>
+                </div>
+
             </main>
             <footer>
                 <button id="startButton" class="button-primary">开始测试</button>
@@ -107,14 +147,20 @@
                     <p>分析完成！以下是您的角色偏好特征总结。</p>
                 </div>
                 <div class="controls-group">
-                    <label for="sortResultsBy">特征排序方式:</label>
-                    <select id="sortResultsBy">
-                        <option value="finalScore">最终得分 (综合推荐度)</option>
-                        <option value="meanAdjustedScore">平均贡献分</option>
-                        <option value="count">角色评分次数</option>
-                        <option value="variance">得分方差 (低→高)</option>
-                        <option value="name">特征名称</option>
-                    </select>
+                    <div>
+                        <label for="sortResultsBy">特征排序方式:</label>
+                        <select id="sortResultsBy">
+                            <option value="finalScore">最终得分 (综合推荐度)</option>
+                            <option value="meanAdjustedScore">平均贡献分</option>
+                            <option value="count">角色评分次数</option>
+                            <option value="variance">得分方差 (低→高)</option>
+                            <option value="name">特征名称</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="countFilter">评分次数过滤≥:</label>
+                        <input type="number" id="countFilter" min="0" value="3">
+                    </div>
                 </div>
                 <div id="trait-scores-display-container">
                     loading...
@@ -146,7 +192,7 @@
 
     </div>
 
-    <div class="projinfo-footer" >
+    <div class="projinfo-footer">
         <span id="version-footer">vnXpTest v114.514</span><br>
         <span>Powered by </span><a href="https://github.com/XDragonWorks" target="_blank">XDragonWorks</span></a>
         &nbsp|&nbsp
@@ -155,4 +201,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>

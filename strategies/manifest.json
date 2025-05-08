@@ -1,0 +1,8 @@
+[
+    {
+        "name": "默认策略",
+        "version": "1.0.0",
+        "description": "默认的均衡策略",
+        "path": "default.json"
+    }
+]
